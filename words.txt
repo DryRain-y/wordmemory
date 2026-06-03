@@ -1,0 +1,221 @@
+english,chinese,example,translation
+apple,苹果,I eat an apple every day,我每天吃一个苹果
+book,书,She reads a book in the library,她在图书馆读一本书
+car,汽车,The car is parked outside,汽车停在外面
+dog,狗,My dog likes to play in the park,我的狗喜欢在公园里玩
+cat,猫,The cat sleeps on the sofa,猫睡在沙发上
+school,学校,We go to school in the morning,我们早上去学校
+teacher,老师,The teacher explains the lesson clearly,老师把课讲得很清楚
+student,学生,The student studies hard for the exam,学生为考试努力学习
+home,家,He returns home after work,他下班后回家
+friend,朋友,My friend helps me when I need it,我的朋友在我需要时帮助我
+water,水,Drink water to stay healthy,喝水保持健康
+food,食物,The food smells delicious,这食物闻起来很香
+music,音乐,She listens to music while studying,她学习时听音乐
+flower,花,The flower blooms in spring,这朵花在春天盛开
+house,房子,The house is painted blue,这房子被涂成蓝色
+city,城市,The city is full of lights at night,这城市夜晚充满灯光
+child,孩子,The child plays with a toy,孩子玩着玩具
+family,家庭,We have dinner with the family,我们和家人一起吃晚饭
+movie,电影,They watch a movie together,他们一起看电影
+travel,旅行,She wants to travel around the world,她想周游世界
+light,光,The room is bright with light,房间被光照亮
+night,夜晚,The night is quiet and calm,夜晚安静平和
+sun,太阳,The sun rises in the east,太阳从东方升起
+moon,月亮,The moon shines in the sky,月亮照亮了天空
+rain,雨,The rain falls softly,雨轻轻地下着
+tree,树,The tree grows tall in the yard,树在院子里长得很高
+river,河,The river flows through the town,河流穿过小镇
+market,市场,She buys vegetables at the market,她在市场买菜
+computer,电脑,He uses the computer to write reports,他用电脑写报告
+phone,电话,The phone rings at noon,电话在中午响了
+letter,信,She writes a letter to her friend,她给朋友写信
+doctor,医生,The doctor checks the patient,医生检查病人
+park,公园,Children play in the park,孩子们在公园玩
+beach,海滩,They walk along the beach,他们沿着海滩散步
+train,火车,The train arrives on time,火车准时到达
+bus,公交车,He takes the bus to work,他坐公交去上班
+plane,飞机,The plane flies above the clouds,飞机在云层上飞行
+hotel,酒店,We stay at a hotel during vacation,我们假期住在酒店
+camera,相机,She takes photos with a camera,她用相机拍照
+film,影片,The film tells a moving story,这部影片讲了一个感人的故事
+party,聚会,We attend a party on Saturday,我们周六参加聚会
+game,游戏,The children play a game outdoors,孩子们在户外玩游戏
+story,故事,He reads a story before bedtime,他睡前读一个故事
+memory,记忆,The memory of the trip is precious,旅行的记忆很珍贵
+lesson,课程,The lesson begins at nine o'clock,课在九点开始
+question,问题,She asks a question in class,她在课堂上提出一个问题
+answer,答案,He gives the correct answer,他给出了正确答案
+language,语言,She studies a new language every year,她每年学习一种新语言
+write,写,He writes a letter to his parents,他给父母写信
+read,读,She likes to read magazines,她喜欢看杂志
+sing,唱,He can sing a beautiful song,他会唱一首优美的歌
+dance,跳舞,They dance at the festival,他们在节日上跳舞
+run,跑,She runs every morning,她每天早上跑步
+walk,走,They walk along the river,他们沿着河走
+swim,游泳,The kids swim in the pool,孩子们在游泳池里游泳
+play,玩,He plays basketball with friends,他和朋友打篮球
+sleep,睡觉,The baby sleeps peacefully,婴儿安静地睡着
+eat,吃,We eat dinner together,我们一起吃晚饭
+drink,喝,He drinks tea after lunch,他午饭后喝茶
+buy,买,She buys a gift for her mother,她给妈妈买了礼物
+sell,卖,They sell fruit at the market,他们在市场卖水果
+open,打开,Please open the window,请打开窗户
+close,关闭,Close the door quietly,轻轻地关上门
+think,想,He thinks about the future,他思考未来
+feel,感觉,She feels happy today,她今天感觉很高兴
+know,知道,He knows the answer to the question,他知道问题的答案
+use,使用,Please use a pencil for writing,请用铅笔写字
+help,帮助,She helps her classmate with homework,她帮助同学做作业
+find,找到,He cannot find his keys,他找不到钥匙
+lose,丢失,She loses her umbrella often,她经常丢伞
+bring,带来,Please bring your book tomorrow,请明天带上你的书
+build,建造,They build a new bridge in the city,他们在城市建了一座新桥
+paint,画,He paints a landscape on the canvas,他在画布上画风景
+draw,画,She draws a picture of a house,她画了一幅房子的画
+listen,听,Listen to the teacher carefully,认真听老师讲课
+watch,看,They watch the stars at night,他们晚上看星星
+wait,等待,Please wait for me at the station,请在车站等我
+join,加入,He joins the school club,他加入了学校社团
+leave,离开,She leaves home at seven o'clock,她七点离家
+meet,见面,They meet every Friday,他们每周五见面
+call,打电话,He calls his friend after class,他课后打电话给朋友
+give,给,She gives him a birthday present,她给他一个生日礼物
+take,拿,Please take this book with you,请把这本书带走
+love,爱,He loves his family very much,他非常爱他的家人
+hate,讨厌,She hates wasting time,她讨厌浪费时间
+like,喜欢,They like to travel together,他们喜欢一起旅行
+need,需要,He needs help with the project,他需要项目方面的帮助
+hope,希望,She hopes to pass the exam,她希望能通过考试
+smile,微笑,He smiles at his friend,他对朋友微笑
+cry,哭,The movie made her cry,电影让她哭了
+teach,教,The teacher teaches English grammar,老师教英语语法
+learn,学,They learn new words every day,他们每天学习新单词
+visit,访问,She visits her grandparents on Sunday,她星期天去看望祖父母
+clean,清洁,Please clean your desk before class,上课前请整理桌子
+drive,开车,He drives to work every day,他每天开车上班
+cook,做饭,She cooks dinner for the family,她为家人做晚饭
+work,工作,He works in a busy office,他在一个繁忙的办公室工作
+rest,休息,Take a rest after studying,学习后休息一下
+carry,携带,She carries a heavy bag,她提着一个沉重的包
+start,开始,The lesson starts at eight,课程八点开始
+finish,完成,He finishes his homework quickly,他很快完成了作业
+change,改变,She decides to change her major,她决定换专业
+keep,保持,Keep your room tidy,保持房间整洁
+share,分享,They share food with classmates,他们与同学分享食物
+remember,记得,Remember to do your homework,记得做作业
+forget,忘记,He forgets his password often,他经常忘记密码
+choose,选择,Please choose the best answer,请选择最佳答案
+decide,决定,She decides to go abroad,她决定出国
+agree,同意,He agrees with the plan,他同意这个计划
+deny,否认,She denies making a mistake,她否认犯了错误
+accept,接受,Please accept this invitation,请接受这个邀请
+refuse,拒绝,He refuses to eat vegetables,他拒绝吃蔬菜
+win,赢,They win the game with effort,他们努力赢得了比赛
+lose,输,The team loses the match,球队输了比赛
+break,打破,He breaks the glass by accident,他不小心打碎了玻璃
+fix,修理,She fixes the broken chair,她修好了坏掉的椅子
+repair,修复,They repair the road after the rain,雨后他们修路
+arrive,到达,The train arrives at nine o'clock,火车九点到达
+depart,离开,The flight departs on time,航班准时起飞
+grow,成长,The child grows taller every year,孩子每年长高
+shrink,缩小,The shirt shrinks after washing,衬衫洗后缩水了
+enter,进入,Please enter the classroom quietly,请安静地进入教室
+exit,退出,The students exit the building,学生们走出楼
+climb,爬,He climbs the mountain with friends,他和朋友一起爬山
+fall,跌倒,The leaf falls from the tree,叶子从树上落下
+stay,停留,She stays at home on weekends,她周末待在家里
+borrow,借,He borrows a book from the library,他从图书馆借了一本书
+lend,借给,She lends her pencil to a classmate,她把铅笔借给同学
+save,保存,Please save your work before closing,关闭前请保存你的工作
+spend,花费,He spends money on books,他在书上花钱
+earn,赚,She earns pocket money on weekends,她周末赚零花钱
+plan,计划,He plans a trip for summer vacation,他为暑假计划旅行
+prepare,准备,She prepares for the test carefully,她认真准备考试
+design,设计,He designs a poster for the event,他为活动设计海报
+create,创建,They create a new study group,他们创建了一个学习小组
+discover,发现,Scientists discover new facts,科学家发现了新事实
+explore,探索,They explore the countryside on holidays,他们假期探索乡村
+protect,保护,We protect the environment together,我们一起保护环境
+support,支持,He supports his teammates,他支持队友
+express,表达,She expresses her ideas clearly,她清晰地表达了想法
+compose,创作,He composes a short poem,他创作了一首短诗
+program,编程,She learns to program in C language,她学习用 C 语言编程
+debug,调试,He debugs the code step by step,他逐步调试代码
+compile,编译,Compile the program before running,运行前先编译程序
+run,运行,Run the program after compilation,编译后运行程序
+install,安装,Please install the software first,请先安装软件
+update,更新,He updates the application regularly,他定期更新应用程序
+delete,删除,Please delete the unnecessary files,请删除不必要的文件
+manage,管理,She manages the class schedule,她管理课程表
+organize,组织,They organize a group study session,他们组织小组学习
+review,复习,Review the vocabulary before the exam,考前复习词汇
+practice,练习,Practice speaking English every day,每天练习说英语
+improve,提高,He wants to improve his listening skills,他想提高听力技能
+progress,进步,She makes progress in reading,她阅读有进步
+achieve,实现,He achieves his learning goal,他实现了学习目标
+complete,完成,Please complete the assignment tonight,今晚请完成作业
+master,掌握,She wants to master new vocabulary,她想掌握新词汇
+recognize,识别,He recognizes the words quickly,他快速识别单词
+explain,解释,The teacher explains the grammar rule,老师解释语法规则
+describe,描述,She describes the picture in detail,她详细描述了这幅画
+search,搜索,He searches for information online,他在网上搜索信息
+answer,回答,She answers the teacher's question,她回答了老师的问题
+express,表达,He expresses his opinion freely,他自由表达了意见
+build,建设,They build a better future together,他们共同建设更好的未来
+create,创造,She creates a simple mobile app,她创建了一个简单的手机应用
+manage,管理,He manages his study time well,他很好地管理学习时间
+review,复习,They review the notes after class,他们课后复习笔记
+practice,练习,Practice writing the correct words,练习写正确的单词
+improve,改善,She improves her pronunciation daily,她每天改善发音
+complete,完成,He completes the project before deadline,他在截止日前完成项目
+remember,记住,Remember to repeat the new words,记住要重复新单词
+forget,忘记,Don't forget to review vocabulary,不要忘记复习词汇
+learn,学习,She learns new skills from the teacher,她从老师那里学习新技能
+teach,教导,He teaches others with patience,他有耐心地教导别人
+prepare,准备,Prepare your notes before the lecture,在讲座前准备好笔记
+share,分享,They share useful study resources,他们分享有用的学习资料
+support,支持,Her family supports her study goals,她的家人支持她的学习目标
+discover,发现,He discovers a new learning method,他发现了一种新的学习方法
+explore,探索,She explores different reading materials,她探索不同的阅读材料
+memorize,记忆,He memorizes a list of words every day,他每天记忆一份单词表
+compare,比较,She compares two answers carefully,她仔细比较两个答案
+count,计算,He counts the number of vocabulary words,他计算词汇数量
+measure,测量,They measure the time spent studying,他们测量学习时间
+observe,观察,She observes the teacher's methods,她观察老师的方法
+predict,预测,He predicts the next question correctly,他正确预测了下一个问题
+encourage,鼓励,The coach encourages the student,教练鼓励学生
+estimate,估计,He estimates how many words he can learn,他估计自己能学多少单词
+create,制作,She creates a small study plan,她制定了一个小学习计划
+follow,遵循,He follows the teacher's advice,他遵循老师的建议
+imagine,想象,She imagines a bright future,她想象着光明的未来
+accept,接受,He accepts the teacher's feedback,他接受老师的反馈
+refuse,拒绝,She refuses bad study habits,她拒绝不好的学习习惯
+complain,抱怨,He never complains about hard work,他从不抱怨辛苦的工作
+encounter,遇到,She encounters new words every day,她每天遇到新单词
+compare,比较,He compares the two answers carefully,他仔细比较两个答案
+express,表达,They express gratitude to the teacher,他们向老师表达感谢
+balance,平衡,She balances study and rest,她平衡学习与休息
+connect,连接,He connects new words with old ones,他把新词和旧词连接起来
+observe,观察,She observes the classmate's study style,她观察同学的学习方式
+investigate,调查,He investigates the meaning of the phrase,他研究短语的含义
+organize,整理,She organizes the vocabulary list well,她整理了词汇表
+recommend,推荐,The teacher recommends good books,老师推荐了好书
+select,选择,He selects the best answer carefully,他慎重选择最佳答案
+understand,理解,She understands the grammar rule now,她现在理解了语法规则
+perform,表现,He performs well in the oral test,他在口语考试中表现很好
+respond,回应,She responds to the question quickly,她迅速回答问题
+solve,解决,He solves the problem step by step,他一步步解决问题
+examine,检查,She examines her notes before the test,她在测试前检查笔记
+identify,识别,He identifies the key vocabulary,他识别出关键词汇
+review,回顾,They review class materials every week,他们每周回顾课堂资料
+repeat,重复,Repeat the sentence to improve memory,重复句子以提高记忆
+practice,实行,He practices new words every evening,他每晚练习新单词
+apply,应用,She applies the vocabulary in writing,她在写作中应用词汇
+compare,比较,He compares his notes with classmates,他把笔记与同学比较
+collect,收集,She collects useful study tips,她收集有用的学习技巧
+explain,解释,He explains the meaning clearly,他清楚地解释了意思
+observe,观察,She observes the pronunciation carefully,她仔细观察发音
+review,复习,He reviews the vocabulary before sleeping,他睡前复习词汇
+continue,继续,She continues to study every day,她每天继续学习
+complete,完整,He completes the vocabulary exercise,他完成了词汇练习
