@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>智能背单词</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, sans-serif;
+            background: linear-gradient(145deg, #1a2a3a 0%, #0e1a24 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .app-container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255,248,235,0.95);
+            border-radius: 48px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6);
+            overflow: hidden;
+        }
+        .header {
+            background: #2c5a6e;
+            background-image: linear-gradient(135deg, #2c5a6e, #1d3e4c);
+            padding: 20px 28px;
+            color: #f9e7c2;
+            text-shadow: 2px 2px 0 #1a2f38;
+            border-bottom: 4px solid #ffb347;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        .main-content {
+            padding: 28px 30px 35px;
+        }
+        .status-bar {
+            background: #e9e2d0;
+            padding: 12px 20px;
+            border-radius: 60px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .user-info {
+            font-weight: bold;
+            background: #2c5a6e;
+            color: #f7e5b3;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .review-badge {
+            background: #d9534f;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .menu-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 20px 0 25px;
+            justify-content: center;
+        }
+        .menu-btn {
+            background: #f5e7d3;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c3e2f;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1 0 auto;
+            min-width: 130px;
+        }
+        .menu-btn:hover { background: #ffda9e; transform: translateY(-2px); }
+        .danger-btn { background: #c95a5a; color: white; }
+        .danger-btn:hover { background: #b14242; }
+        .action-area {
+            background: #fffef7;
+            border-radius: 32px;
+            padding: 25px;
+            margin-top: 15px;
+            box-shadow: inset 0 0 0 1px #fff8, 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .quiz-card {
+            background: #f3efdf;
+            border-radius: 32px;
+            padding: 18px 25px;
+        }
+        .option-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .opt-item {
+            background: #e0d5bd;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.1s;
+            font-weight: 500;
+        }
+        .opt-item:hover:not(.disabled) { background: #ffcd94; transform: scale(1.01); }
+        .opt-item.disabled { opacity: 0.5; cursor: not-allowed; background: #c0b28a; }
+        .message-area {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 28px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .message-correct { background: #d4edda; color: #155724; border-left: 6px solid #28a745; }
+        .message-wrong { background: #f8d7da; color: #721c24; border-left: 6px solid #dc3545; }
+        input, button { font-family: inherit; }
+        input {
+            padding: 10px 18px;
+            border-radius: 60px;
+            border: 1px solid #c0b28a;
+            background: #fffaf2;
+            width: 100%;
+            max-width: 300px;
+            margin: 8px 0;
+        }
+        button {
+            background: #4e7b6b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .back-btn { background: #7f8c8d; margin-top: 20px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .notice { color: #a55d2a; font-size: 0.85rem; }
+        @media (max-width: 650px) { .main-content { padding: 20px; } .menu-btn { min-width: 100px; font-size: 0.85rem; } }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <div class="header"><h1>智能背单词</h1></div>
+    <div class="main-content" id="mainContent"></div>
+</div>
+
+<script>
+    // ---------- 全局变量 ----------
+    let g_words = [];
+    let g_word_count = 0;
+    let g_users = [];
+    let g_current_user = null;
+    let g_wrong_list = [];
+
+    // 存储与加载
+    function saveAllData() { localStorage.setItem('vocab_users', JSON.stringify(g_users)); if (g_words.length) localStorage.setItem('vocab_words', JSON.stringify(g_words)); }
+    function loadAllData() {
+        const storedWords = localStorage.getItem('vocab_words');
+        if (storedWords) { g_words = JSON.parse(storedWords); g_word_count = g_words.length; } 
+        else {
+            g_words = [
+                {word:"apple", meaning:"苹果", example:"I eat an apple every day.", example_trans:"我每天吃一个苹果。"},
+                {word:"car", meaning:"汽车", example:"He drives a red car.", example_trans:"他开一辆红色汽车。"},
+                {word:"happy", meaning:"快乐的", example:"She is very happy.", example_trans:"她非常快乐。"},
+                {word:"big", meaning:"大的", example:"This is a big house.", example_trans:"这是一所大房子。"},
+                {word:"run", meaning:"跑", example:"I run every morning.", example_trans:"我每天早上跑步。"},
+                {word:"blue", meaning:"蓝色", example:"The sky is blue.", example_trans:"天空是蓝色的。"},
+                {word:"teacher", meaning:"老师", example:"Mr. Li is a teacher.", example_trans:"李先生是老师。"},
+                {word:"book", meaning:"书", example:"I read a book.", example_trans:"我读一本书。"},
+                {word:"computer", meaning:"电脑", example:"My computer is new.", example_trans:"我的电脑是新的。"},
+                {word:"student", meaning:"学生", example:"Tom is a student.", example_trans:"汤姆是学生。"}
+            ];
+            g_word_count = g_words.length;
+            localStorage.setItem('vocab_words', JSON.stringify(g_words));
+        }
+        const storedUsers = localStorage.getItem('vocab_users');
+        if (storedUsers) {
+            g_users = JSON.parse(storedUsers);
+            for (let u of g_users) {
+                if (!u.review_weights) u.review_weights = new Array(g_word_count).fill(0);
+                if (!u.wrongList) u.wrongList = [];
+                if (u.mode1_correct === undefined) u.mode1_correct = 0;
+                if (u.mode1_total === undefined) u.mode1_total = 0;
+                if (u.mode2_correct === undefined) u.mode2_correct = 0;
+                if (u.mode2_total === undefined) u.mode2_total = 0;
+                if (!u.daily_goal) u.daily_goal = 10;
+            }
+        } else g_users = [];
+    }
+    function saveUsers() { localStorage.setItem('vocab_users', JSON.stringify(g_users)); }
+    function syncCurrentUser() {
+        if (!g_current_user) return;
+        const idx = g_users.findIndex(u => u.username === g_current_user.username);
+        if (idx !== -1) { g_users[idx] = JSON.parse(JSON.stringify(g_current_user)); saveUsers(); }
+        g_wrong_list = g_current_user.wrongList ? [...g_current_user.wrongList] : [];
+    }
+    async function loadExternalWordFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const lines = e.target.result.split(/\r?\n/);
+                    const newWords = [];
+                    for (let line of lines) {
+                        if (!line.trim()) continue;
+                        const parts = line.split(',');
+                        if (parts.length >= 4) newWords.push({ word: parts[0].trim(), meaning: parts[1].trim(), example: parts[2].trim(), example_trans: parts[3].trim() });
+                    }
+                    if (newWords.length === 0) reject(new Error("格式错误，需要每行: 英文,中文,例句,翻译"));
+                    g_words = newWords;
+                    g_word_count = g_words.length;
+                    localStorage.setItem('vocab_words', JSON.stringify(g_words));
+                    for (let u of g_users) {
+                        let oldWeights = u.review_weights || [];
+                        let newWeights = new Array(g_word_count).fill(0);
+                        for (let i=0; i<Math.min(oldWeights.length, g_word_count); i++) newWeights[i]=oldWeights[i];
+                        u.review_weights = newWeights;
+                        if (u.wrongList) u.wrongList = u.wrongList.filter(w => g_words.some(wd => wd.word === w));
+                    }
+                    saveUsers();
+                    if (g_current_user) {
+                        const current = g_users.find(u => u.username === g_current_user.username);
+                        if (current) g_current_user = JSON.parse(JSON.stringify(current));
+                        syncCurrentUser();
+                    }
+                    resolve(newWords.length);
+                } catch(err) { reject(err); }
+            };
+            reader.readAsText(file, "UTF-8");
+        });
+    }
+    function addWrongWord(word) {
+        if (!g_current_user) return;
+        if (!g_current_user.wrongList.includes(word)) { g_current_user.wrongList.push(word); syncCurrentUser(); }
+    }
+    function removeWrongWord(word) {
+        if (!g_current_user) return;
+        const idx = g_current_user.wrongList.indexOf(word);
+        if (idx !== -1) { g_current_user.wrongList.splice(idx,1); syncCurrentUser(); }
+    }
+
+    // 视图状态
+    let currentView = "menu";
+    let quizState = { mode: null, questions: [], currentIndex: 0, correctCount: 0, answeredCount: 0, testNum: 0, exitFlag: false, waitingNext: false, answerLock: false, lastResult: null };
+
+    function render() {
+        const container = document.getElementById('mainContent');
+        if (!g_current_user) renderNotLoggedMenu(container);
+        else {
+            if (currentView === 'menu') renderLoggedMenu(container);
+            else if (currentView === 'mode1') renderQuiz(container, 'mode1');
+            else if (currentView === 'mode2') renderQuiz(container, 'mode2');
+            else if (currentView === 'fillblank') renderFillBlank(container);
+            else if (currentView === 'reviewCurve') renderReview(container);
+            else if (currentView === 'dict') renderDict(container);
+            else if (currentView === 'manageVocab') renderManageVocab(container);
+            else if (currentView === 'setPlan') renderSetPlan(container);
+            else if (currentView === 'wrongList') renderWrongList(container);
+            else renderLoggedMenu(container);
+        }
+    }
+
+    // 未登录界面
+    function renderNotLoggedMenu(container) {
+        container.innerHTML = `
+            <div class="status-bar"><span>未登录</span><span>请先注册/登录</span></div>
+            <div class="menu-grid">
+                <button class="menu-btn" id="loginBtn">登录</button>
+                <button class="menu-btn" id="regBtn">注册</button>
+                <button class="menu-btn" id="dictBtn">英汉词典</button>
+                <button class="menu-btn" id="loadWordsBtn">导入外部词库</button>
+            </div>
+            <div class="action-area" id="actionArea"></div>
+        `;
+        document.getElementById('loginBtn').onclick = () => showLoginForm();
+        document.getElementById('regBtn').onclick = () => showRegForm();
+        document.getElementById('dictBtn').onclick = () => { currentView='dict'; render(); };
+        document.getElementById('loadWordsBtn').onclick = () => triggerFileImport();
+        document.getElementById('actionArea').innerHTML = `<div class="notice"></div>`;
+    }
+
+    function showLoginForm() {
+        const actionDiv = document.getElementById('actionArea');
+        actionDiv.innerHTML = `<h3>登录</h3><input type="text" id="loginUser" placeholder="用户名" /><br/><input type="password" id="loginPwd" placeholder="密码" /><br/><button id="doLogin">登录</button><button class="back-btn" id="cancelLogin">取消</button>`;
+        document.getElementById('doLogin').onclick = () => {
+            const uname = document.getElementById('loginUser').value, pwd = document.getElementById('loginPwd').value;
+            const user = g_users.find(u => u.username === uname && u.password === pwd);
+            if (user) {
+                g_current_user = JSON.parse(JSON.stringify(user));
+                if (!g_current_user.review_weights) g_current_user.review_weights = new Array(g_word_count).fill(0);
+                if (g_current_user.review_weights.length !== g_word_count) {
+                    let newArr = new Array(g_word_count).fill(0);
+                    for(let i=0;i<Math.min(g_current_user.review_weights.length, g_word_count);i++) newArr[i]=g_current_user.review_weights[i];
+                    g_current_user.review_weights = newArr;
+                }
+                if (!g_current_user.wrongList) g_current_user.wrongList = [];
+                syncCurrentUser();
+                currentView = 'menu'; render();
+            } else alert("用户名或密码错误");
+        };
+        document.getElementById('cancelLogin').onclick = () => render();
+    }
+    function showRegForm() {
+        const actionDiv = document.getElementById('actionArea');
+        actionDiv.innerHTML = `<h3>注册</h3><input type="text" id="regUser" placeholder="用户名" /><br/><input type="password" id="regPwd" placeholder="密码" /><br/><button id="doReg">注册</button><button class="back-btn" id="cancelReg">取消</button>`;
+        document.getElementById('doReg').onclick = () => {
+            const uname = document.getElementById('regUser').value, pwd = document.getElementById('regPwd').value;
+            if (!uname || !pwd) { alert("用户名/密码不能为空"); return; }
+            if (g_users.some(u=>u.username === uname)) { alert("用户名已存在"); return; }
+            g_users.push({ username: uname, password: pwd, mode1_correct:0, mode1_total:0, mode2_correct:0, mode2_total:0, daily_goal:10, review_weights: new Array(g_word_count).fill(0), wrongList: [] });
+            saveUsers();
+            alert("注册成功，请登录");
+            render();
+        };
+        document.getElementById('cancelReg').onclick = () => render();
+    }
+
+    function triggerFileImport() {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = '.txt';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try { const cnt = await loadExternalWordFile(file); alert(`成功加载 ${cnt} 个单词！`); render(); } 
+            catch(err) { alert("加载失败："+err.message); }
+        };
+        input.click();
+    }
+
+    // 登录后主菜单
+    function renderLoggedMenu(container) {
+        let reviewCnt = 0;
+        if (g_current_user && g_current_user.review_weights) for (let i=0;i<g_word_count;i++) if (g_current_user.review_weights[i] >= 3) reviewCnt++;
+        container.innerHTML = `
+            <div class="status-bar"><span class="user-info">${g_current_user.username} (每日${g_current_user.daily_goal}词)</span><span class="review-badge">需复习: ${reviewCnt} 词</span></div>
+            <div class="menu-grid">
+                <button class="menu-btn" id="menuDict">词典查询</button>
+                <button class="menu-btn" id="menuMode1">模式1(英选汉)</button>
+                <button class="menu-btn" id="menuMode2">模式2(汉选英)</button>
+                <button class="menu-btn" id="menuFill">首字母填空</button>
+                <button class="menu-btn" id="menuReview">记忆曲线复习</button>
+                <button class="menu-btn" id="menuManage">词库管理</button>
+                <button class="menu-btn" id="menuPlan">学习计划</button>
+                <button class="menu-btn" id="menuWrong">错题本</button>
+                <button class="menu-btn" id="menuImport">导入词库</button>
+                <button class="menu-btn danger-btn" id="logoutBtn">注销</button>
+            </div>
+            <div class="action-area"><p>累计: 模式1正确 ${g_current_user.mode1_correct}/${g_current_user.mode1_total} | 模式2正确 ${g_current_user.mode2_correct}/${g_current_user.mode2_total}</p></div>
+        `;
+        document.getElementById('menuDict').onclick = () => { currentView='dict'; render(); };
+        document.getElementById('menuMode1').onclick = () => startQuiz('mode1');
+        document.getElementById('menuMode2').onclick = () => startQuiz('mode2');
+        document.getElementById('menuFill').onclick = () => { currentView='fillblank'; render(); };
+        document.getElementById('menuReview').onclick = () => startReview();
+        document.getElementById('menuManage').onclick = () => { currentView='manageVocab'; render(); };
+        document.getElementById('menuPlan').onclick = () => { currentView='setPlan'; render(); };
+        document.getElementById('menuWrong').onclick = () => { currentView='wrongList'; render(); };
+        document.getElementById('menuImport').onclick = () => triggerFileImport();
+        document.getElementById('logoutBtn').onclick = () => { g_current_user = null; currentView='menu'; render(); };
+    }
+
+    // 背单词模式 (手动下一题)
+    function startQuiz(mode) {
+        let testNum = g_current_user.daily_goal;
+        if (testNum > g_word_count) testNum = g_word_count;
+        if (testNum <=0) testNum = 10;
+        const questions = [];
+        for(let i=0;i<testNum;i++) questions.push(Math.floor(Math.random()*g_word_count));
+        quizState = { mode, questions, currentIndex:0, correctCount:0, answeredCount:0, testNum, exitFlag:false, waitingNext:false, answerLock:false, lastResult:null };
+        currentView = (mode==='mode1'? 'mode1':'mode2');
+        render();
+    }
+    function renderQuiz(container, mode) {
+        if (quizState.exitFlag || quizState.currentIndex >= quizState.questions.length) {
+            const answered = quizState.answeredCount, correct = quizState.correctCount;
+            if (mode === 'mode1') { g_current_user.mode1_correct += correct; g_current_user.mode1_total += answered; }
+            else { g_current_user.mode2_correct += correct; g_current_user.mode2_total += answered; }
+            syncCurrentUser();
+            alert(`测试结束！正确 ${correct}/${answered} ${answered? (correct*100/answered).toFixed(1):0}%`);
+            currentView = 'menu'; render();
+            return;
+        }
+        const idx = quizState.questions[quizState.currentIndex];
+        const wordObj = g_words[idx];
+        let opts = [idx];
+        while(opts.length < 4) { let r = Math.floor(Math.random()*g_word_count); if (!opts.includes(r)) opts.push(r); }
+        for (let i=opts.length-1;i>0;i--) { const j = Math.floor(Math.random()*(i+1)); [opts[i], opts[j]] = [opts[j], opts[i]]; }
+        const isMode1 = (mode === 'mode1');
+        const questionText = isMode1 ? `单词: ${wordObj.word}` : `释义: ${wordObj.meaning}`;
+        const optionTexts = opts.map(optIdx => isMode1 ? g_words[optIdx].meaning : g_words[optIdx].word);
+        container.innerHTML = `
+            <div class="quiz-card">
+                <h3>${isMode1 ? '英文→中文' : '中文→英文'} (第${quizState.currentIndex+1}/${quizState.testNum}题)</h3>
+                <p style="font-size:1.6rem; margin:20px 0">${questionText}</p>
+                <div class="option-list" id="optionsList"></div>
+                <div id="quizMessage" class="message-area"></div>
+                <div class="flex-between">
+                    <button id="exitQuizBtn">中途退出</button>
+                    <button id="nextQuizBtn" style="background:#2c5a6e;" disabled>下一题</button>
+                    <span>正确:${quizState.correctCount}</span>
+                </div>
+            </div>
+        `;
+        const optDiv = document.getElementById('optionsList');
+        const msgDiv = document.getElementById('quizMessage');
+        const nextBtn = document.getElementById('nextQuizBtn');
+        const exitBtn = document.getElementById('exitQuizBtn');
+
+        const goToNext = () => {
+            if (quizState.waitingNext) {
+                quizState.currentIndex++;
+                quizState.waitingNext = false;
+                quizState.answerLock = false;
+                renderQuiz(container, mode);
+            }
+        };
+        const disableOptions = (disabled) => {
+            document.querySelectorAll('.opt-item').forEach(btn => {
+                if (disabled) btn.classList.add('disabled'); else btn.classList.remove('disabled');
+            });
+        };
+        optionTexts.forEach((txt, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'opt-item';
+            btn.innerText = `${i+1}. ${txt}`;
+            btn.onclick = () => {
+                if (quizState.answerLock) return;
+                const selectedIdx = opts[i];
+                const isCorrect = (selectedIdx === idx);
+                quizState.answerLock = true;
+                disableOptions(true);
+                if (isCorrect) {
+                    quizState.correctCount++;
+                    if (g_current_user.review_weights[idx] > 0) g_current_user.review_weights[idx]--;
+                    msgDiv.innerHTML = `<div class="message-area message-correct">✅ 正确！</div>`;
+                } else {
+                    const rightAns = isMode1 ? g_words[idx].meaning : g_words[idx].word;
+                    msgDiv.innerHTML = `<div class="message-area message-wrong">❌ 错误！正确答案: ${rightAns}</div>`;
+                    g_current_user.review_weights[idx] = Math.min(10, (g_current_user.review_weights[idx] || 0) + 2);
+                    addWrongWord(wordObj.word);
+                }
+                quizState.answeredCount++;
+                syncCurrentUser();
+                quizState.waitingNext = true;
+                nextBtn.disabled = false;
+            };
+            optDiv.appendChild(btn);
+        });
+        nextBtn.onclick = () => { if (!nextBtn.disabled) goToNext(); };
+        exitBtn.onclick = () => { if (confirm("确认退出？已答题会计入统计")) { quizState.exitFlag = true; renderQuiz(container, mode); } };
+    }
+
+    // 首字母填空（手动下一题）
+    function renderFillBlank(container) {
+        const idx = Math.floor(Math.random() * g_word_count);
+        const wordObj = g_words[idx];
+        const word = wordObj.word;
+        let blank = word[0] + '_'.repeat(word.length-1);
+        let sentence = wordObj.example;
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        sentence = sentence.replace(regex, blank);
+        let answerLock = false;
+        let waitingNext = false;
+        const refreshNew = () => {
+            renderFillBlank(container);
+        };
+        container.innerHTML = `
+            <div class="quiz-card">
+                <h3>首字母填空</h3>
+                <p>例句：${sentence}</p>
+                <input type="text" id="fillAnswer" placeholder="输入完整单词" autocomplete="off" />
+                <button id="submitFill">提交</button>
+                <div id="fillMessage" class="message-area"></div>
+                <div class="flex-between">
+                    <button class="back-btn" id="backFill">返回主菜单</button>
+                    <button id="nextFillBtn" style="background:#2c5a6e;" disabled>下一题</button>
+                </div>
+            </div>
+        `;
+        const answerInput = document.getElementById('fillAnswer');
+        const submitBtn = document.getElementById('submitFill');
+        const msgDiv = document.getElementById('fillMessage');
+        const nextBtn = document.getElementById('nextFillBtn');
+        const backBtn = document.getElementById('backFill');
+
+        const goToNext = () => {
+            if (waitingNext) refreshNew();
+        };
+        submitBtn.onclick = () => {
+            if (answerLock) return;
+            const ans = answerInput.value.trim();
+            if (ans.length === 0) { msgDiv.innerHTML = `<div class="message-area message-wrong">请输入答案</div>`; return; }
+            answerLock = true;
+            if (ans.toLowerCase() === word.toLowerCase()) {
+                msgDiv.innerHTML = `<div class="message-area message-correct">✅ 正确！</div>`;
+                if (g_current_user.review_weights[idx] > 0) g_current_user.review_weights[idx]--;
+            } else {
+                msgDiv.innerHTML = `<div class="message-area message-wrong">❌ 错误！正确答案: ${word}</div>`;
+                g_current_user.review_weights[idx] = Math.min(10, (g_current_user.review_weights[idx]||0)+2);
+                addWrongWord(word);
+            }
+            syncCurrentUser();
+            submitBtn.disabled = true;
+            answerInput.disabled = true;
+            waitingNext = true;
+            nextBtn.disabled = false;
+        };
+        nextBtn.onclick = () => { if (!nextBtn.disabled) goToNext(); };
+        backBtn.onclick = () => { currentView='menu'; render(); };
+    }
+
+    // 记忆曲线复习 (保持原有逻辑，但同样改为手动下一题，简单处理)
+    function startReview() {
+        let revList = [];
+        for (let i=0;i<g_word_count;i++) if (g_current_user.review_weights[i] >= 3) revList.push(i);
+        if (revList.length === 0) { alert("当前没有需要复习的单词！"); currentView='menu'; render(); return; }
+        const testNum = Math.min(10, revList.length);
+        const questions = [];
+        for(let i=0;i<testNum;i++) questions.push(revList[Math.floor(Math.random()*revList.length)]);
+        quizState = { mode: 'review', questions, currentIndex:0, correctCount:0, answeredCount:0, testNum, exitFlag:false, waitingNext:false, answerLock:false };
+        currentView = 'reviewCurve';
+        render();
+    }
+    function renderReview(container) {
+        if (quizState.exitFlag || quizState.currentIndex >= quizState.questions.length) {
+            syncCurrentUser();
+            alert(`复习结束: 正确 ${quizState.correctCount}/${quizState.answeredCount}`);
+            currentView='menu'; render();
+            return;
+        }
+        const idx = quizState.questions[quizState.currentIndex];
+        const wordObj = g_words[idx];
+        const mode = Math.random() < 0.5 ? 0 : 1;
+        let opts = [idx];
+        while(opts.length<4) { let r=Math.floor(Math.random()*g_word_count); if(!opts.includes(r)) opts.push(r); }
+        for(let i=opts.length-1;i>0;i--) { let j=Math.floor(Math.random()*(i+1)); [opts[i],opts[j]]=[opts[j],opts[i]]; }
+        const question = mode===0 ? `单词: ${wordObj.word}` : `释义: ${wordObj.meaning}`;
+        const optTexts = opts.map(o => mode===0 ? g_words[o].meaning : g_words[o].word);
+        container.innerHTML = `<div class="quiz-card"><h3>记忆曲线复习</h3><p>${question}</p><div class="option-list" id="revOpts"></div><div id="revMsg" class="message-area"></div><div class="flex-between"><button id="exitRev">退出复习</button><button id="nextRevBtn" style="background:#2c5a6e;" disabled>下一题</button></div></div>`;
+        const optDiv = document.getElementById('revOpts');
+        const msgDiv = document.getElementById('revMsg');
+        const nextBtn = document.getElementById('nextRevBtn');
+        const disableOptions = (d) => { document.querySelectorAll('.opt-item').forEach(b => { if(d) b.classList.add('disabled'); else b.classList.remove('disabled'); }); };
+        const next = () => { if (quizState.waitingNext) { quizState.currentIndex++; quizState.waitingNext=false; quizState.answerLock=false; renderReview(container); } };
+        optTexts.forEach((txt, i) => {
+            const btn = document.createElement('div'); btn.className='opt-item'; btn.innerText=`${i+1}. ${txt}`;
+            btn.onclick = () => {
+                if (quizState.answerLock) return;
+                quizState.answerLock = true;
+                disableOptions(true);
+                const isCorrect = (opts[i] === idx);
+                if(isCorrect) {
+                    quizState.correctCount++;
+                    if (g_current_user.review_weights[idx] > 0) g_current_user.review_weights[idx]--;
+                    msgDiv.innerHTML = `<div class="message-area message-correct">✅ 正确！</div>`;
+                } else {
+                    const rightAns = mode===0? g_words[idx].meaning : g_words[idx].word;
+                    msgDiv.innerHTML = `<div class="message-area message-wrong">❌ 错误！正确答案: ${rightAns}</div>`;
+                    g_current_user.review_weights[idx] = Math.min(10, (g_current_user.review_weights[idx]||0)+1);
+                    addWrongWord(wordObj.word);
+                }
+                quizState.answeredCount++;
+                syncCurrentUser();
+                quizState.waitingNext = true;
+                nextBtn.disabled = false;
+            };
+            optDiv.appendChild(btn);
+        });
+        nextBtn.onclick = () => { if (!nextBtn.disabled) next(); };
+        document.getElementById('exitRev').onclick = () => { if(confirm("退出复习?")) { quizState.exitFlag=true; renderReview(container); } };
+    }
+
+    // 词典查询
+    function renderDict(container) {
+        container.innerHTML = `<div><h3>英汉词典</h3><input id="dictWord" placeholder="输入英文单词"/><button id="searchDict">查询</button><div id="dictRes"></div><button class="back-btn" id="backDict">返回</button></div>`;
+        document.getElementById('searchDict').onclick = () => {
+            const w = document.getElementById('dictWord').value.trim();
+            const found = g_words.find(wd => wd.word.toLowerCase() === w.toLowerCase());
+            const resDiv = document.getElementById('dictRes');
+            if(found) resDiv.innerHTML = `<strong>${found.word}</strong><br/>释义: ${found.meaning}<br/>例句: ${found.example}<br/>翻译: ${found.example_trans}`;
+            else resDiv.innerHTML = "未找到该单词";
+        };
+        document.getElementById('backDict').onclick = () => { currentView='menu'; render(); };
+    }
+
+    // 词库管理
+    function renderManageVocab(container) {
+        container.innerHTML = `<h3>词库管理</h3><div class="word-list" id="wordList"></div><div><button id="addWordBtn">添加单词</button><button id="backManage" class="back-btn">返回</button></div>`;
+        const refreshList = () => {
+            const listDiv = document.getElementById('wordList');
+            if(!listDiv) return;
+            listDiv.innerHTML = g_words.map((w,i)=>`<div class="word-item">${w.word} - ${w.meaning} <button class="editWordBtn" data-idx="${i}">编辑</button> <button class="delWordBtn" data-idx="${i}">删除</button></div>`).join('');
+            document.querySelectorAll('.editWordBtn').forEach(btn => btn.onclick = () => editWord(parseInt(btn.dataset.idx)));
+            document.querySelectorAll('.delWordBtn').forEach(btn => btn.onclick = () => { if(confirm('删除单词?')) { g_words.splice(parseInt(btn.dataset.idx),1); g_word_count=g_words.length; localStorage.setItem('vocab_words',JSON.stringify(g_words)); syncCurrentUser(); refreshList(); renderManageVocab(container); } });
+        };
+        const editWord = (idx) => {
+            const w = g_words[idx];
+            const newMeaning = prompt("修改中文释义", w.meaning);
+            if(newMeaning !== null) w.meaning = newMeaning;
+            const newExample = prompt("修改例句", w.example);
+            if(newExample !== null) w.example = newExample;
+            const newTrans = prompt("修改例句翻译", w.example_trans);
+            if(newTrans !== null) w.example_trans = newTrans;
+            localStorage.setItem('vocab_words',JSON.stringify(g_words));
+            refreshList();
+        };
+        refreshList();
+        document.getElementById('addWordBtn').onclick = () => {
+            let newWord = prompt("英文单词"); if(!newWord) return;
+            let newMean = prompt("中文释义");
+            let newEx = prompt("例句") || "";
+            let newTrans = prompt("例句翻译") || "";
+            g_words.push({word:newWord, meaning:newMean, example:newEx, example_trans:newTrans});
+            g_word_count++;
+            localStorage.setItem('vocab_words',JSON.stringify(g_words));
+            for(let u of g_users) { let old = u.review_weights; let newArr = new Array(g_word_count).fill(0); for(let i=0;i<old.length;i++) newArr[i]=old[i]; u.review_weights = newArr; }
+            syncCurrentUser();
+            refreshList();
+        };
+        document.getElementById('backManage').onclick = () => { currentView='menu'; render(); };
+    }
+
+    function renderSetPlan(container) {
+        container.innerHTML = `<h3>学习计划</h3><p>当前每日计划: ${g_current_user.daily_goal} 词</p><input id="newGoal" type="number" min="1" max="100" placeholder="新计划数"/><button id="setGoal">设置</button><button class="back-btn" id="backPlan">返回</button>`;
+        document.getElementById('setGoal').onclick = () => {
+            let ng = parseInt(document.getElementById('newGoal').value);
+            if(ng>0 && ng<=100) { g_current_user.daily_goal = ng; syncCurrentUser(); alert("计划已更新"); renderSetPlan(container);}
+            else alert("无效");
+        };
+        document.getElementById('backPlan').onclick = () => { currentView='menu'; render(); };
+    }
+
+    function renderWrongList(container) {
+        if(g_wrong_list.length===0){
+            container.innerHTML = `<div><h3>错题本</h3><p>暂无错题，继续努力！</p><button class="back-btn" id="backWrong">返回</button></div>`;
+            document.getElementById('backWrong').onclick = () => { currentView='menu'; render(); };
+            return;
+        }
+        let html = `<h3>错题本 (${g_wrong_list.length})</h3><ul>`;
+        g_wrong_list.forEach(w => {
+            const wordObj = g_words.find(wd=>wd.word===w);
+            const mean = wordObj ? wordObj.meaning : "已从词库删除";
+            html += `<li>${w} — ${mean} <button class="removeWrong" data-word="${w}">移除</button></li>`;
+        });
+        html += `</ul><button id="clearWrong">清空错题本</button><button class="back-btn" id="backWrongList">返回</button>`;
+        container.innerHTML = html;
+        document.querySelectorAll('.removeWrong').forEach(btn => btn.onclick = () => { removeWrongWord(btn.dataset.word); renderWrongList(container); });
+        document.getElementById('clearWrong').onclick = () => { if(confirm("清空所有错题？")) { g_current_user.wrongList = []; syncCurrentUser(); renderWrongList(container); } };
+        document.getElementById('backWrongList').onclick = () => { currentView='menu'; render(); };
+    }
+
+    // 启动
+    loadAllData();
+    render();
+</script>
+</body>
+</html>
